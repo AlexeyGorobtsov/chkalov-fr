@@ -58,11 +58,25 @@ const sendDataForm = {
         const url = '/';
         request.open('POST', url);
         request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        request.responseType = "json";
+        request.responseType = "";
         request.onload = function () {
-            console.log(request.response)
+            //console.log(request.response)
         };
-        request.send(ajaxObj);
+
+        const rawBody = {
+            'name': name.value,
+            'email': email.value,
+            'message': text.value,
+        };
+
+        request.send(JSON.stringify(rawBody));
+
+        if (request.responseText === 'ok') {
+            alert("Попробуйте отправить заявку еще раз...");
+        } else {
+            alert("Наш менеджер свяжется с вами в ближайшее время!");
+            q('.i-close').click();
+        }
 
     },
 
@@ -79,13 +93,84 @@ const sendDataForm = {
             }
         });
 
-        send.addEventListener('click', () => {
+        send.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
             this.init();
             Comagic.addOfflineRequest(ajaxObj);
-            console.log(ajaxObj);
+            //console.log(ajaxObj);
+            return false;
         })
 
     }
 };
 
 sendDataForm.send();
+
+const modalTable = {
+    init: function () {
+        const modal = q('.main-modal');
+        const href = q('.choice-href');
+        const closeModal = q('.modal-container .i-close');
+        const learnMore = document.querySelectorAll('.modal-container table tbody tr td:last-child ');
+
+        href.addEventListener('click', e => {
+            e.preventDefault();
+            modal.style.display = 'block';
+            q('body').classList.add('fixed');
+        });
+
+        closeModal.addEventListener('click', e => {
+            e.preventDefault();
+            modal.style.display = 'none';
+            q('body').classList.remove('fixed');
+        });
+
+        window.addEventListener('click', e => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                q('body').classList.remove('fixed');
+            }
+        });
+
+        learnMore.forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelector('.b-popup').classList = 'b-popup prepare active';
+            })
+        })
+
+    }
+};
+
+modalTable.init();
+
+
+const slideText = {
+    init: function () {
+
+        let slideIndex = 1;
+        const next = q('.next');
+        const prev = q('.prev');
+
+
+        const showSlides = n => {
+          const slides = document.querySelectorAll('.mySlides');
+          if (n > slides.length) { slideIndex = 1}
+          if (n < 1) { slideIndex = slides.length }
+          slides.forEach(item => {
+              item.style.display = 'none';
+          });
+
+            slides[slideIndex - 1].style.display = 'block';
+        };
+
+        const plusSlides = n => showSlides(slideIndex += n);
+
+        showSlides(slideIndex);
+
+        prev.addEventListener('click', () => plusSlides(-1));
+        next.addEventListener('click', () => plusSlides(1));
+    }
+};
+
+slideText.init();
