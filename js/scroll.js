@@ -64,14 +64,14 @@ const sendDataForm = {
         };
 
         const rawBody = {
-            'name': name.value,
-            'email': email.value,
-            'message': text.value,
+            'name' : name.value,
+            'email' : email.value,
+            'message' : text.value,
         };
 
         request.send(JSON.stringify(rawBody));
 
-        if (request.responseText === 'ok') {
+        if (request.responseText == 'ok') {
             alert("Попробуйте отправить заявку еще раз...");
         } else {
             alert("Наш менеджер свяжется с вами в ближайшее время!");
@@ -106,6 +106,7 @@ const sendDataForm = {
 };
 
 sendDataForm.send();
+
 
 const modalTable = {
     init: function () {
@@ -146,20 +147,20 @@ modalTable.init();
 
 
 const slideText = {
-    init: function () {
+    init: function (next, prev, slides) {
 
         let slideIndex = 1;
-        const next = q('.next');
-        const prev = q('.prev');
+        // const next = q('.next');
+        // const prev = q('.prev');
 
 
         const showSlides = n => {
-          const slides = document.querySelectorAll('.mySlides');
-          if (n > slides.length) { slideIndex = 1}
-          if (n < 1) { slideIndex = slides.length }
-          slides.forEach(item => {
-              item.style.display = 'none';
-          });
+            //const slides = document.querySelectorAll('.mySlides');
+            if (n > slides.length) { slideIndex = 1}
+            if (n < 1) { slideIndex = slides.length }
+            slides.forEach(item => {
+                item.style.display = 'none';
+            });
 
             slides[slideIndex - 1].style.display = 'block';
         };
@@ -173,4 +174,5 @@ const slideText = {
     }
 };
 
-slideText.init();
+slideText.init(q('.next'), q('.prev'), document.querySelectorAll('.mySlides'));
+slideText.init(q('.next-top'), q('.prev-top'), document.querySelectorAll('.mySlides-top'));
